@@ -71,8 +71,12 @@ public class EntityManager {
 
 	public void movePlayer(String username, Vector3f position) {
 		// TODO(BEN): handle this better. client does not need to receive data that it sent!
-		if (!username.equals(MultiplayerManager.getInstance().getClient().getCurrentPlayer().getUsername()))
-			getPlayerNamed(username).setPosition(position);
+		if (!username.equals(MultiplayerManager.getInstance().getClient().getCurrentPlayer().getUsername())) {
+			NetworkPlayer player = getPlayerNamed(username);
+			if (player != null)
+				player.setPosition(position);
+		}
+			
 	}
 	
 	public NetworkPlayer getPlayerNamed(String username){
