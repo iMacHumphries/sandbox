@@ -37,7 +37,7 @@ public class NetworkPlayer extends Player{
 	public void increasePosition(float dx, float dy, float dz) {
 		super.increasePosition(dx, dy, dz);
 		if ((dx != 0 || dy != 0 || dz != 0)) {
-			MultiplayerManager.getInstance().sendPosition(getUsername(), getPosition());
+			MultiplayerManager.getInstance().sendPosition(getUsername(), getPosition(), getRotation());
 		}
 	}
 

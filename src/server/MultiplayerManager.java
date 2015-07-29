@@ -37,9 +37,9 @@ public class MultiplayerManager {
 		loginPack.writeData(client);
 	}
 	
-	public void sendPosition(String username, Vector3f position) {
+	public void sendPosition(String username, Vector3f position, Vector3f rotation) {
 		Debug.log("sending pos");
-		Packet_02_Move movePacket = new Packet_02_Move(username, (int)position.x, (int)position.y, (int)position.z);
+		Packet_02_Move movePacket = new Packet_02_Move(username, (int)position.x, (int)position.y, (int)position.z, (int)rotation.x, (int)rotation.y,(int)rotation.z);
 		movePacket.writeData(client);
 	}
 
