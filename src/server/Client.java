@@ -77,7 +77,7 @@ public class Client extends Thread {
 		}
 		
 		private void handleMove(Packet_02_Move packetMove) {
-			EntityManager.getInstance().movePlayer(packetMove.getUsername(), packetMove.getPosition());
+			EntityManager.getInstance().movePlayer(packetMove.getUsername(), packetMove.getPosition(), packetMove.getRotation());
 		}
 
 		public void sendData(byte[] data)

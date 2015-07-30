@@ -69,12 +69,17 @@ public class EntityManager {
 		playersToAdd.add(new ServerPlayer(ip,port,username));
 	}
 
-	public void movePlayer(String username, Vector3f position) {
+	public void movePlayer(String username, Vector3f position, Vector3f rotation) {
 		// TODO(BEN): handle this better. client does not need to receive data that it sent!
 		if (!username.equals(MultiplayerManager.getInstance().getClient().getCurrentPlayer().getUsername())) {
 			NetworkPlayer player = getPlayerNamed(username);
-			if (player != null)
-				player.setPosition(position);
+			if (player != null) {
+			player.setPosition(position);
+			player.setRotX(rotation.x);
+			player.setRotY(rotation.y);
+			player.setRotZ(rotation.z);
+			}
+
 		}
 			
 	}

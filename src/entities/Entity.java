@@ -98,6 +98,10 @@ public class Entity implements SWPDelegate{
 		return position;
 	}
 
+	public Vector3f getRotation() {
+		return new Vector3f(rotX, rotY, rotZ);
+	}
+	
 	/**
 	 * @param position the position to set
 	 */
