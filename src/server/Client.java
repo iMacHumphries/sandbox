@@ -10,6 +10,7 @@ import java.net.UnknownHostException;
 import engineTester.MainGameLoop;
 import entities.EntityManager;
 import entities.NetworkPlayer;
+import guis.ChatBox;
 import server.Packet.PacketType;
 import toolbox.Debug;
 
@@ -69,6 +70,12 @@ public class Client extends Thread {
 				case DISCONNECT:
 					Packet_00_Disconnect packetDisc = new Packet_00_Disconnect(_data);
 					System.out.println(packetDisc.getUsername() + " has left the game...");
+					break;
+					
+				case MESSAGE:
+					Packet_03_Message mPack = new Packet_03_Message(_data);
+					Debug.log("got a message from " + mPack.getUsername());
+					MultiplayerManager.getInstance().recieveMessagePacket(mPack);
 					break;
 				default:
 				case INVALID:

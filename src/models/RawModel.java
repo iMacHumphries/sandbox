@@ -12,7 +12,8 @@ public class RawModel {
 	public RawModel(int _vaoID, int _vertexCount, float[] points) {
 		this.vaoID = _vaoID;
 		this.vertexCount = _vertexCount;
-		fillPositionsArray(points);
+		if (points != null)
+			fillPositionsArray(points);
 	}
 	
 	private void fillPositionsArray(float[] points) {
@@ -27,7 +28,7 @@ public class RawModel {
 			}
 		}
 	}
-	
+			
 	/**
 	 * @return the positions
 	 */

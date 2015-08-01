@@ -62,7 +62,8 @@ public abstract class Packet {
 		INVALID(-1),
 		DISCONNECT(00),
 		LOGIN(01),
-		MOVE(02);
+		MOVE(02),
+		MESSAGE(03);
 		
 		private int packetID;
 		private PacketType(int _id)

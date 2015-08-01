@@ -1,0 +1,13 @@
+#version 140
+
+in vec2 pass_textureCoords;
+
+out vec4 out_Color;
+
+uniform sampler2D fontTexture;
+
+void main(void){
+
+	out_Color = texture(fontTexture, pass_textureCoords);
+
+}

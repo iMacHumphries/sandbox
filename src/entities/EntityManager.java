@@ -4,16 +4,13 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.vector.Vector3f;
 
-import engineTester.MainGameLoop;
-import renderEngine.DisplayManager;
 import server.MultiplayerManager;
 import server.ServerPlayer;
 import toolbox.Debug;
 import models.TexturedModel;
+
 
 public class EntityManager {
 

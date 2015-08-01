@@ -76,6 +76,10 @@ public class Server extends Thread{
 				ServerPlayer player = new ServerPlayer(ip, port, p.getUsername());
 				this.addConnection(player, p);
 				break;
+			case MESSAGE:
+				Packet_03_Message mPack = new Packet_03_Message(data);
+				mPack.writeData(this);
+				break;
 		}
 	}
 	

@@ -40,6 +40,14 @@ public class NetworkPlayer extends Player{
 			MultiplayerManager.getInstance().sendPosition(getUsername(), getPosition(), getRotation());
 		}
 	}
+	
+	@Override
+	public void increaseRotation(float dx, float dy, float dz) {
+		super.increaseRotation(dx, dy, dz);
+		if ((dx != 0 || dy != 0 || dz != 0)) {
+			MultiplayerManager.getInstance().sendPosition(getUsername(), getPosition(), getRotation());
+		}
+	}
 
 	/**
 	 * @return the ipAddress
