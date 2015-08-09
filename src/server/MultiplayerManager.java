@@ -97,5 +97,5 @@ public class MultiplayerManager {
 	 */
 	public void setClient(Client client) {
 		this.client = client;
-	}	
+	}
 }

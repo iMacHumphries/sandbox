@@ -14,6 +14,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
+import renderEngine.MasterRenderer;
 import toolbox.Maths;
 import entities.Camera;
 import entities.Light;

@@ -47,7 +47,7 @@ public class ChatBox implements TypeWriterDelegate{
 	public void addMessage(String message) {
 		if (message == null) return;
 		Debug.log("adding new label " + message);
-		Label label = new Label(message, new Vector2f(-1f,-1f), LABEL_SCALE, new Vector4f(1.0f,1.0f,1.0f,1.0f));
+		Label label = new Label(message, new Vector2f(-1f,-1f), LABEL_SCALE, new Vector4f(255,255,255,1.0f));
 		messageLabels.add(label);
 		shiftAllMessageseUp();
 		

@@ -1,0 +1,11 @@
+Performance
+Fix Edge reduction algorithm
+	- change loader t0 load all indices of LOD to the positions VBO(0 (i think)) in the VAO.
+	- change the renderer to use the indices with an offset and a length determined by the LevelOfDetail in the RawModel.
+
+Terrain Edge reduction algorithm
+Test FPS Before and after.
+
+Non-performance
+Precision collision algorithm research
+Ship cannons :D

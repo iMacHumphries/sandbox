@@ -10,6 +10,7 @@ import collision.SweepAndPrune;
 import server.MultiplayerManager;
 import terrains.Terrain;
 import toolbox.Debug;
+import water.WaterTile;
 
 public class NetworkPlayer extends Player{
 
@@ -28,8 +29,8 @@ public class NetworkPlayer extends Player{
 	}
 	
 	@Override
-	public void move(Terrain terrain) {
-		super.move(terrain);
+	public void move(Terrain terrain, WaterTile water) {
+		super.move(terrain,water);
 		
 	}
 	

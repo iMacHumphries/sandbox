@@ -41,6 +41,25 @@ public class Label {
 		texture = Loader.getInstance().loadTexture("fontMap2");
 	}
 	
+	public void addText(String c) {
+		try {
+			text += c;
+			labelMesh = createLabelMesh(text);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void removeChar() {
+		try {
+			if (text.length() > 0) {
+				text = text.substring(0, text.length()-1);
+				labelMesh = createLabelMesh(text);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	private RawModel createLabelMesh(String text) throws IOException {
 		float[] positions = new float[text.length() * 8];

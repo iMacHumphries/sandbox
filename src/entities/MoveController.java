@@ -2,7 +2,9 @@ package entities;
 
 public class MoveController {
 
-	Entity currentControlledEntity;
+	private Entity currentControlledEntity;
+	private Entity placeHolder;
+	private boolean isLocked = false;
 	
 	public static MoveController sharedMoveController;
 	public static MoveController getInstance(){
@@ -22,6 +24,10 @@ public class MoveController {
 	public Entity getCurrentControlledEntity() {
 		return currentControlledEntity;
 	}
+	
+	public Entity getPlaceHolder() {
+		return this.placeHolder;
+	}
 
 	/**
 	 * @param currentControlledEntity the currentControlledEntity to set
@@ -30,5 +36,16 @@ public class MoveController {
 		this.currentControlledEntity = currentControlledEntity;
 	}
 	
+	public void lock(){
+		isLocked = true;
+		placeHolder = this.currentControlledEntity;
+		this.currentControlledEntity = null;
+	}
 	
+	public void unlock(){
+		if (isLocked) {
+			this.currentControlledEntity = placeHolder;
+			isLocked = false;
+		}
+	}
 }

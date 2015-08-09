@@ -2,18 +2,23 @@ package models;
 
 import org.lwjgl.util.vector.Vector3f;
 
+import toolbox.Maths;
+
 
 public class RawModel {
 	
 	private int vaoID;
 	private int vertexCount;
 	private Vector3f[] positions;
+	private LevelOfDetail levelOfDetail;
 	
-	public RawModel(int _vaoID, int _vertexCount, float[] points) {
+	public RawModel(int _vaoID, int _vertexCount, float[] indices) {
 		this.vaoID = _vaoID;
 		this.vertexCount = _vertexCount;
-		if (points != null)
-			fillPositionsArray(points);
+		levelOfDetail = new LevelOfDetail(indices);
+		if (indices != null) {
+			fillPositionsArray(indices);
+		}
 	}
 	
 	private void fillPositionsArray(float[] points) {
@@ -36,6 +41,7 @@ public class RawModel {
 		return positions;
 	}
 
+
 	/**
 	 * @return the vaoID
 	 */
@@ -48,6 +54,10 @@ public class RawModel {
 	 */
 	public int getVertexCount() {
 		return vertexCount;
+	}
+
+	public LevelOfDetail getLevelOfDetail() {
+		return this.levelOfDetail;
 	}
 		
 }

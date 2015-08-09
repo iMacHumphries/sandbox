@@ -4,6 +4,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
+import renderEngine.MasterRenderer;
 import toolbox.Debug;
 
 
@@ -36,7 +37,10 @@ public class Camera{
 	}
 	
 	private Entity getCurrentEntity(){
-		return MoveController.getInstance().getCurrentControlledEntity();
+		Entity e = MoveController.getInstance().getCurrentControlledEntity();
+		if (e == null)
+			e =  MoveController.getInstance().getPlaceHolder();
+		return e;
 	}
 
 	public void move() {
@@ -48,6 +52,16 @@ public class Camera{
 
 		this.calculateCameraPosition(horizontalDistance, verticalDistance);
 		this.yaw = 180 - (getCurrentEntity().getRotY() + this.angleAroundPlayer);
+		
+		MasterRenderer master = MasterRenderer.getInstance();
+		if (position.y < 4) {
+			Debug.log("cam underwater");
+			master.setFogDensity(0.05f);
+			master.setFogGradient(2f);
+		} else {
+			master.setFogDensity(MasterRenderer.DEFAULT_FOG_DENSITY);
+			master.setFogGradient(MasterRenderer.DEFAULT_FOG_GRADIENT);
+		}
 
 	}
 	

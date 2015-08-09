@@ -43,6 +43,7 @@ public class LabelRenderer {
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, label.getTexture());
 			Matrix4f matrix = Maths.createTransformationMatrix(label.getPosition(), label.getSize());
 			shader.loadTransformation(matrix);
+			shader.loadFontColor(label.getColor());
 			GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, label.getLabelMesh().getVertexCount());
 			
 		}

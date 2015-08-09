@@ -10,13 +10,15 @@ import renderEngine.DisplayManager;
 import server.MultiplayerManager;
 import terrains.Terrain;
 import toolbox.Debug;
+import water.WaterTile;
 
 public class Player extends Entity{
 
-	private static final float RUN_SPEED = 20;
+	private static final float RUN_SPEED = 30;
+	private static final float SWIM_SPEED = 10;
 	private static final float TURN_SPEED = 160;
 	private static final float GRAVITY = -50;
-	private static final float JUMP_POWER = 30;
+	private static final float JUMP_POWER = 20;
 	
 	private static final float TERRAIN_HEIGHT = 0;
 	
@@ -24,6 +26,7 @@ public class Player extends Entity{
 	private float currentTurnSpeed = 0;
 	private float upwardsSpeed;
 	private boolean isInAir = false;
+	private boolean isSwimming = false;
 	
 	
 	public Player(TexturedModel model, Vector3f position, float rotX,
@@ -32,7 +35,7 @@ public class Player extends Entity{
 
 	}
 
-	public void move(Terrain terrain) {
+	public void move(Terrain terrain, WaterTile water) {
 	
 		float terrainHeight = terrain.getHeightOfTerrain(super.getPosition().x, super.getPosition().z);
 		if (super.getPosition().y < terrainHeight) {
@@ -44,15 +47,20 @@ public class Player extends Entity{
 			upwardsSpeed += GRAVITY * DisplayManager.getDelta();
 		}
 		
+		if (MoveController.getInstance().getCurrentControlledEntity() == this)
+			checkInputs();
 		
-		if (MoveController.getInstance().getCurrentControlledEntity() != this) return;
-		checkInputs();
 		increaseRotation(0, currentTurnSpeed * DisplayManager.getDelta(), 0);
 		float distance = currentSpeed * DisplayManager.getDelta();
 		float dx = (float) (distance * Math.sin(Math.toRadians(super.getRotY())));
 		float dz = (float) (distance * Math.cos(Math.toRadians(super.getRotY())));
-		
 		increasePosition(dx, upwardsSpeed * DisplayManager.getDelta(), dz);
+		
+		if (getPosition().y + this.boundingBox.getMaxY()/4 < water.getHeight()) {
+			Debug.log("underwater");
+			isSwimming = true;
+		} else isSwimming = false;
+		
 	}
 	
 
@@ -71,11 +79,11 @@ public class Player extends Entity{
 	private void checkInputs() {
 		
 		if (Mouse.isButtonDown(0) && Mouse.isButtonDown(1)) {
-			this.currentSpeed = RUN_SPEED;
+			this.currentSpeed = getSpeed();
 		} else if (Keyboard.isKeyDown(Keyboard.KEY_W)){
-			this.currentSpeed = RUN_SPEED;
+			this.currentSpeed = getSpeed();
 		} else if (Keyboard.isKeyDown(Keyboard.KEY_S)){
-			this.currentSpeed = -RUN_SPEED;
+			this.currentSpeed = -getSpeed();
 		} else {
 			this.currentSpeed = 0;
 		}
@@ -95,6 +103,14 @@ public class Player extends Entity{
 		}
 	}
 
+	private float getSpeed(){
+		if (!isSwimming) {
+			return this.RUN_SPEED;
+		} else {
+			return this.SWIM_SPEED;
+		}
+	}
+	
 	/**
 	 * @return the currentSpeed
 	 */

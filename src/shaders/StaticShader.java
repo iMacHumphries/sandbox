@@ -30,6 +30,8 @@ public class StaticShader extends ShaderProgram {
 	private int location_numberOfRows;
 	private int location_offset;
 	private int location_plane;
+	private int location_fogDensity;
+	private int location_fogGradient;
 	
 	public StaticShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);		
@@ -55,7 +57,8 @@ public class StaticShader extends ShaderProgram {
 		location_numberOfRows = super.getUniformLocation("numberOfRows");
 		location_offset = super.getUniformLocation("offset");
 		location_plane = super.getUniformLocation("plane");
-		
+		location_fogDensity = super.getUniformLocation("fogDensity");
+		location_fogGradient = super.getUniformLocation("fogGradient");
 		
 		location_lightPosition = new int[MAX_LIGHTS];
 		location_lightColor = new int[MAX_LIGHTS];
@@ -68,6 +71,11 @@ public class StaticShader extends ShaderProgram {
 		}
 	}
 
+	public void loadFogDensityGradient(float density, float gradient) {
+		super.loadFloat(location_fogDensity, density);
+		super.loadFloat(location_fogGradient, gradient);
+	}
+	
 	public void loadClipPlane(Vector4f plane) {
 		super.loadVector(location_plane, plane);
 	}
