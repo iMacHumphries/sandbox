@@ -3,6 +3,7 @@ package renderEngine;
 import java.util.List;
 import java.util.Map;
 
+import models.LevelOfDetail;
 import models.RawModel;
 import models.TexturedModel;
 
@@ -53,8 +54,10 @@ public class EntityRenderer {
 				prepareInstance(entity);
 				
 				// Render array in triangles. start at 0 render all
-				GL11.glDrawElements(GL11.GL_TRIANGLES, model.getRawModel().getVertexCount(),
-						GL11.GL_UNSIGNED_INT, 0);
+				LevelOfDetail lod = model.getRawModel().getLevelOfDetail();
+				lod.determineCorrectLOD();
+				GL11.glDrawElements(GL11.GL_TRIANGLES, lod.getCorrectIndices().length,
+						GL11.GL_UNSIGNED_INT, lod.getBufferOffset());
 				//GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, model.getVertexCount());
 				
 			}

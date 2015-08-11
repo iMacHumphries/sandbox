@@ -2,6 +2,7 @@ package models;
 
 import java.util.ArrayList;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
 
 import toolbox.Debug;
@@ -18,7 +19,7 @@ public class LevelOfDetail {
 	public LevelOfDetail(float[] originalIndices) {		
 		listOfDetails = new ArrayList<float[]>();
 		currentLevelOfDetail = MAX_LEVEL_OF_DETAIL;
-		for (int lod = MAX_LEVEL_OF_DETAIL; lod < MIN_LEVEL_OF_DETAIL; lod++)
+		for (int lod = MAX_LEVEL_OF_DETAIL; lod <= MIN_LEVEL_OF_DETAIL; lod++)
 			listOfDetails.add(lod, generateEdgeReductionWithLevelOfDetail(originalIndices, lod));
 	}
 	
@@ -85,6 +86,47 @@ public class LevelOfDetail {
 		return result;
 	}
 	
+	public void determineCorrectLOD() {
+		while(Keyboard.next()) {
+			if (Keyboard.getEventKey() == Keyboard.KEY_0) {
+			    if (!Keyboard.getEventKeyState()) {
+			    	currentLevelOfDetail = 0;
+			    }
+			}
+			else if (Keyboard.getEventKey() == Keyboard.KEY_1) {
+			    if (!Keyboard.getEventKeyState()) {
+			    	currentLevelOfDetail = 1;
+			    }
+			}
+			else if (Keyboard.getEventKey() == Keyboard.KEY_2) {
+			    if (!Keyboard.getEventKeyState()) {
+			    	currentLevelOfDetail = 2;
+			    }
+			}
+			else if (Keyboard.getEventKey() == Keyboard.KEY_3) {
+			    if (!Keyboard.getEventKeyState()) {
+			    	currentLevelOfDetail = 3;
+			    }
+			}
+			else if (Keyboard.getEventKey() == Keyboard.KEY_4) {
+			    if (!Keyboard.getEventKeyState()) {
+			    	currentLevelOfDetail = 4;
+			    }
+			}
+			else if (Keyboard.getEventKey() == Keyboard.KEY_5) {
+			    if (!Keyboard.getEventKeyState()) {
+			    	currentLevelOfDetail = 5;
+			    }
+			}
+			else if (Keyboard.getEventKey() == Keyboard.KEY_6) {
+			    if (!Keyboard.getEventKeyState()) {
+			    	currentLevelOfDetail = 6;
+			    }
+			}
+
+		}
+	}
+	
 	public void setCurrentLOD(int i) {
 		currentLevelOfDetail = i;
 	}
@@ -93,5 +135,23 @@ public class LevelOfDetail {
 		return currentLevelOfDetail;
 	}
 	
+	private int floatSizeOfList() {
+		int count = 0;
+		for(float[] array : this.listOfDetails)
+			for (int i = 0; i < array.length; i++)
+				count++;
+		return count;
+	}
 	
+	public float[] getFloatArray() {
+		float[] combinedArray = new float[floatSizeOfList()];
+		int index = 0;
+		for(float[] array : this.listOfDetails) {
+			for (int i = 0; i < array.length; i++) {
+				combinedArray[index + i] = array[i];
+			}
+			index += array.length;
+		}
+		return combinedArray;
+	}
 }

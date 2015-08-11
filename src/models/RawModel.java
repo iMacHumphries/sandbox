@@ -21,6 +21,16 @@ public class RawModel {
 		}
 	}
 	
+	public RawModel(int vaoID, int vertexCount, float[] indices,
+			LevelOfDetail lod) {
+		this.vaoID = vaoID;
+		this.vertexCount = vertexCount;
+		levelOfDetail = lod;
+		if (indices != null) {
+			fillPositionsArray(indices);
+		}
+	}
+
 	private void fillPositionsArray(float[] points) {
 		if (points.length % 3 == 0)
 		{
