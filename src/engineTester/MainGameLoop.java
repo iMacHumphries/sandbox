@@ -131,7 +131,7 @@ public class MainGameLoop{
 		Ship ship = new Ship(new TexturedModel("ship", "boatTexture"), new Vector3f(752,7, -150), 0, 180, 0, 1, waters);
 		entityManager.addEntity(ship);
 
-		boolean isDevModeSet = false;
+		boolean isDevModeSet = true;
 
 		while(!Display.isCloseRequested()) {
 			

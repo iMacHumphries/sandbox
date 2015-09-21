@@ -7,4 +7,5 @@ Test FPS Before and after.
 
 Non-performance
 Precision collision algorithm research
-Ship cannons :D
+Ship cannons :D (Parent Child System?)
+Animation Systems With Blender Parser(.obj)?.

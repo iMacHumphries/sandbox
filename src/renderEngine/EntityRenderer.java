@@ -56,8 +56,10 @@ public class EntityRenderer {
 				// Render array in triangles. start at 0 render all
 				LevelOfDetail lod = model.getRawModel().getLevelOfDetail();
 				lod.determineCorrectLOD();
-				GL11.glDrawElements(GL11.GL_TRIANGLES, lod.getCorrectIndices().length,
-						GL11.GL_UNSIGNED_INT, lod.getBufferOffset());
+				//GL11.glDrawElements(GL11.GL_TRIANGLES, lod.getFloatArray().length,
+					//	GL11.GL_UNSIGNED_INT, lod.getBufferOffset());
+				GL11.glDrawElements(GL11.GL_TRIANGLES, model.getRawModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+				//GL11.glDrawElements(mode, indices_count, type, indices_buffer_offset);
 				//GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, model.getVertexCount());
 				
 			}

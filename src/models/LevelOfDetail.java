@@ -17,6 +17,7 @@ public class LevelOfDetail {
 	private ArrayList<float[]> listOfDetails;
 	
 	public LevelOfDetail(float[] originalIndices) {		
+		Debug.log("creating LOD");
 		listOfDetails = new ArrayList<float[]>();
 		currentLevelOfDetail = MAX_LEVEL_OF_DETAIL;
 		for (int lod = MAX_LEVEL_OF_DETAIL; lod <= MIN_LEVEL_OF_DETAIL; lod++)
@@ -29,9 +30,8 @@ public class LevelOfDetail {
 	
 	public int getBufferOffset() {
 		int offset = 0;
-		for (int i = 0; i < currentLevelOfDetail; i++) {
+		for (int i = 0; i < currentLevelOfDetail; i++)
 			offset += listOfDetails.get(i).length;
-		}
 		return offset;
 	}
 	
@@ -42,93 +42,96 @@ public class LevelOfDetail {
 	 * @param lod
 	 */
 	private float[] generateEdgeReductionWithLevelOfDetail(float[] indices, int lod) {
-		if (lod == MAX_LEVEL_OF_DETAIL) return indices;
-		else if(lod == MIN_LEVEL_OF_DETAIL) return new float[0];
-		
-		if (indices == null) return null;
-		
-		float[] indicesCopy = indices.clone();
-		float[] result = indicesCopy;
-		int verticesRemoved = 0;
-		float min = Float.MAX_VALUE;
-		int indexToRemove = 0;
-		
-		int MAX_VETICES = indices.length - (indices.length * (lod/MIN_LEVEL_OF_DETAIL));
-		
-		while (result.length > MAX_VETICES) {
-			// Find the min edge
-			for (int i = 0; i < indicesCopy.length -5; i+=3) {
-				Vector3f point = new Vector3f(i,i+1,i+2);
-				Vector3f nextPoint = new Vector3f(i+3,i+4,i+5);
-				float distance = Maths.distance(point, nextPoint);
-				if (distance < min) {
-					min = distance;
-					indexToRemove = i;
-				}
-			}
-
-			verticesRemoved += 3;
-			// remove the vertices to combine the points
-			result = new float[indicesCopy.length - verticesRemoved];
-			Debug.log(result.length);
-			int newI = 0;
-			for(int i = 0; i < indicesCopy.length; i++){
-				if (i<indexToRemove && i>indexToRemove+3) {
-					result[newI] = indicesCopy[i];
-					newI+=3;
-				} else {
-					//Debug.log("removed vertex");
-				}	
-			}
-			
-		}
-		
-		return result;
+		return indices;
+//		//Debug.log("generating LOD lvl->"+lod);
+//		if (lod == MAX_LEVEL_OF_DETAIL) return indices;
+//		else if(lod == MIN_LEVEL_OF_DETAIL) return new float[0];
+//				
+//		float[] indicesCopy = indices.clone();
+//		float[] result =  indices.clone();
+//				
+//		int indexToRemove = 0;
+//		
+//		float value = indices.length - (indices.length * ((float)lod/(float)MIN_LEVEL_OF_DETAIL));
+//		int MAX_VETICES = (int)value;
+//		Debug.log("max Vertices-> " +MAX_VETICES + " original LEN->"+result.length);
+//		int count = 0;
+//		while (result.length > MAX_VETICES) {
+//			count++;
+//			// Find the min edge
+//			float min = Float.MAX_VALUE;
+//			for (int i = 0; i < result.length; i+=3) {
+//				Vector3f point = new Vector3f(i,i+1,i+2);
+//				Vector3f nextPoint = new Vector3f(i+3,i+4,i+5);
+//				float distance = Maths.distance(point, nextPoint);
+//				if (distance < min) {
+//					min = distance;
+//					indexToRemove = i;
+//				}
+//			}
+//
+//			// remove the vertices to combine the points
+//			result = new float[result.length - 3];
+//			int newI = 0;
+//			for(int i = 0; i < result.length; i++){
+//				if (i!=indexToRemove && i!=indexToRemove+1 && i!=indexToRemove+2) {
+//					result[newI] = indicesCopy[i];
+//					newI++;
+//				} else {
+//					//not increasing newI just increasing i (removing...)
+//				}	
+//			}	
+//		}
+//		Debug.log("removal count->"+count);
+//		return result;
 	}
 	
 	public void determineCorrectLOD() {
-		while(Keyboard.next()) {
-			if (Keyboard.getEventKey() == Keyboard.KEY_0) {
-			    if (!Keyboard.getEventKeyState()) {
-			    	currentLevelOfDetail = 0;
-			    }
-			}
-			else if (Keyboard.getEventKey() == Keyboard.KEY_1) {
-			    if (!Keyboard.getEventKeyState()) {
-			    	currentLevelOfDetail = 1;
-			    }
-			}
-			else if (Keyboard.getEventKey() == Keyboard.KEY_2) {
-			    if (!Keyboard.getEventKeyState()) {
-			    	currentLevelOfDetail = 2;
-			    }
-			}
-			else if (Keyboard.getEventKey() == Keyboard.KEY_3) {
-			    if (!Keyboard.getEventKeyState()) {
-			    	currentLevelOfDetail = 3;
-			    }
-			}
-			else if (Keyboard.getEventKey() == Keyboard.KEY_4) {
-			    if (!Keyboard.getEventKeyState()) {
-			    	currentLevelOfDetail = 4;
-			    }
-			}
-			else if (Keyboard.getEventKey() == Keyboard.KEY_5) {
-			    if (!Keyboard.getEventKeyState()) {
-			    	currentLevelOfDetail = 5;
-			    }
-			}
-			else if (Keyboard.getEventKey() == Keyboard.KEY_6) {
-			    if (!Keyboard.getEventKeyState()) {
-			    	currentLevelOfDetail = 6;
-			    }
-			}
-
-		}
+		this.setCurrentLOD(1);
+//		while(Keyboard.next()) {
+//			if (Keyboard.getEventKey() == Keyboard.KEY_0) {
+//			    if (!Keyboard.getEventKeyState()) {
+//			    	setCurrentLOD(0);
+//			    }
+//			}
+//			else if (Keyboard.getEventKey() == Keyboard.KEY_1) {
+//			    if (!Keyboard.getEventKeyState()) {
+//			    	setCurrentLOD(1);
+//			    }
+//			}
+//			else if (Keyboard.getEventKey() == Keyboard.KEY_2) {
+//			    if (!Keyboard.getEventKeyState()) {
+//			    	setCurrentLOD(2);
+//			    }
+//			}
+//			else if (Keyboard.getEventKey() == Keyboard.KEY_3) {
+//			    if (!Keyboard.getEventKeyState()) {
+//			    	setCurrentLOD(3);
+//			    }
+//			}
+//			else if (Keyboard.getEventKey() == Keyboard.KEY_4) {
+//			    if (!Keyboard.getEventKeyState()) {
+//			    	setCurrentLOD(4);
+//			    }
+//			}
+//			else if (Keyboard.getEventKey() == Keyboard.KEY_5) {
+//			    if (!Keyboard.getEventKeyState()) {
+//			    	setCurrentLOD(5);
+//			    }
+//			}
+//			else if (Keyboard.getEventKey() == Keyboard.KEY_6) {
+//			    if (!Keyboard.getEventKeyState()) {
+//			    	setCurrentLOD(6);
+//			    }
+//			}
+//			
+//		}
 	}
 	
 	public void setCurrentLOD(int i) {
 		currentLevelOfDetail = i;
+//		Debug.log("buffer off->"+getBufferOffset());
+//		Debug.log(this.getCorrectIndices());
 	}
 	
 	public int getCurrentLOD() {

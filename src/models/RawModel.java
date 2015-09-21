@@ -15,10 +15,10 @@ public class RawModel {
 	public RawModel(int _vaoID, int _vertexCount, float[] indices) {
 		this.vaoID = _vaoID;
 		this.vertexCount = _vertexCount;
-		levelOfDetail = new LevelOfDetail(indices);
-		if (indices != null) {
+		if (indices != null && indices.length > 8)
+			levelOfDetail = new LevelOfDetail(indices);
+		if (indices != null)
 			fillPositionsArray(indices);
-		}
 	}
 	
 	public RawModel(int vaoID, int vertexCount, float[] indices,

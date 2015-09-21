@@ -14,6 +14,7 @@ public class MultiplayerManager {
 	private Server server;
 	private Client client;
 	private ArrayList<String> messagesToAdd = new ArrayList<String>();
+	private static final String HOST_IP = "137.45.155.107";
 	
 	private static MultiplayerManager sharedManager;
 	public static MultiplayerManager getInstance() {
@@ -28,7 +29,7 @@ public class MultiplayerManager {
 	}
 	
 	public void startClient(NetworkPlayer player) {
-		client = new Client("192.168.0.4", player);
+		client = new Client(HOST_IP, player);
 		client.start();
 	}
 	
