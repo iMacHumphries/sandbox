@@ -14,7 +14,7 @@ public class MultiplayerManager {
 	private Server server;
 	private Client client;
 	private ArrayList<String> messagesToAdd = new ArrayList<String>();
-	private static final String HOST_IP = "137.45.155.107";
+	private static final String HOST_IP = "137.45.94.175";
 	
 	private static MultiplayerManager sharedManager;
 	public static MultiplayerManager getInstance() {
