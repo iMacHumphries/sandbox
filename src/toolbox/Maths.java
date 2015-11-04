@@ -1,5 +1,7 @@
 package toolbox;
 
+import java.util.ArrayList;
+
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
@@ -168,5 +170,8 @@ public class Maths {
 		return new BoundingEllipsoid(radius, center, dxDistance, dyDistance, dzDistance);
 	}
 	
+	public static float distance(Vector3f v1, Vector3f v2) {
+		return (float) (Math.sqrt(Math.pow(v2.x - v1.x, 2) + Math.pow(v2.y - v1.z, 2) + Math.pow(v2.z - v1.z, 2)));
+	}
 
 }

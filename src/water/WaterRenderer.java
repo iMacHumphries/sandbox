@@ -4,6 +4,7 @@ import java.util.List;
 
 import models.RawModel;
 
+import org.lwjgl.opengl.APPLEVertexArrayObject;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
@@ -13,6 +14,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
+import renderEngine.MasterRenderer;
 import toolbox.Maths;
 import entities.Camera;
 import entities.Light;
@@ -58,7 +60,12 @@ public class WaterRenderer {
 		moveFactor += WAVE_SPEED * DisplayManager.getDelta();
 		moveFactor %= 1;
 		shader.loadMoveFactor(moveFactor);
-		GL30.glBindVertexArray(quad.getVaoID());
+		try {
+			APPLEVertexArrayObject.glBindVertexArrayAPPLE(quad.getVaoID());
+		} catch (Exception e) {
+			GL30.glBindVertexArray(quad.getVaoID());
+		}
+		
 		GL20.glEnableVertexAttribArray(0);
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fbos.getReflectionTexture());
@@ -73,7 +80,11 @@ public class WaterRenderer {
 	
 	private void unbind(){
 		GL20.glDisableVertexAttribArray(0);
-		GL30.glBindVertexArray(0);
+		try {
+			APPLEVertexArrayObject.glBindVertexArrayAPPLE(0);
+		} catch (Exception e) {
+			GL30.glBindVertexArray(0);
+		}
 		shader.stop();
 	}
 

@@ -3,6 +3,7 @@ package renderEngine;
 import java.util.List;
 import java.util.Map;
 
+import models.LevelOfDetail;
 import models.RawModel;
 import models.TexturedModel;
 
@@ -53,8 +54,12 @@ public class EntityRenderer {
 				prepareInstance(entity);
 				
 				// Render array in triangles. start at 0 render all
-				GL11.glDrawElements(GL11.GL_TRIANGLES, model.getRawModel().getVertexCount(),
-						GL11.GL_UNSIGNED_INT, 0);
+				LevelOfDetail lod = model.getRawModel().getLevelOfDetail();
+				lod.determineCorrectLOD();
+				//GL11.glDrawElements(GL11.GL_TRIANGLES, lod.getFloatArray().length,
+					//	GL11.GL_UNSIGNED_INT, lod.getBufferOffset());
+				GL11.glDrawElements(GL11.GL_TRIANGLES, model.getRawModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+				//GL11.glDrawElements(mode, indices_count, type, indices_buffer_offset);
 				//GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, model.getVertexCount());
 				
 			}
@@ -84,7 +89,7 @@ public class EntityRenderer {
 		shader.loadFakeLightingVariable(texture.isUseFakeLighting());
 		
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getID());
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getID());
 	}
 	
 	private void unbindTexturedModel() {

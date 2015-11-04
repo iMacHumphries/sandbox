@@ -34,6 +34,10 @@ public class Debug {
 	}
 	
 	public static void log(float[] _array) {
+		if (_array.length <= 0) {
+			print("emptyArray");
+			return;
+		}
 		String result = "[";
 		for (float s : _array)
 			result += s + ", ";
@@ -43,6 +47,10 @@ public class Debug {
 	}
 	
 	public static void log(String[] _array) {
+		if (_array.length <= 0) {
+			print("emptyArray");
+			return;
+		}
 		String result = "[";
 		for (String s : _array)
 			result += s + ", ";
@@ -52,6 +60,10 @@ public class Debug {
 	}
 	
 	public static void log(int[] _array) {
+		if (_array.length <= 0) {
+			print("emptyArray");
+			return;
+		}
 		String result = "[";
 		for (int s : _array)
 			result += s + ", ";

@@ -10,6 +10,7 @@ import collision.SweepAndPrune;
 import server.MultiplayerManager;
 import terrains.Terrain;
 import toolbox.Debug;
+import water.WaterTile;
 
 public class NetworkPlayer extends Player{
 
@@ -28,14 +29,22 @@ public class NetworkPlayer extends Player{
 	}
 	
 	@Override
-	public void move(Terrain terrain) {
-		super.move(terrain);
+	public void move(Terrain terrain, WaterTile water) {
+		super.move(terrain,water);
 		
 	}
 	
 	@Override
 	public void increasePosition(float dx, float dy, float dz) {
 		super.increasePosition(dx, dy, dz);
+		if ((dx != 0 || dy != 0 || dz != 0)) {
+			MultiplayerManager.getInstance().sendPosition(getUsername(), getPosition(), getRotation());
+		}
+	}
+	
+	@Override
+	public void increaseRotation(float dx, float dy, float dz) {
+		super.increaseRotation(dx, dy, dz);
 		if ((dx != 0 || dy != 0 || dz != 0)) {
 			MultiplayerManager.getInstance().sendPosition(getUsername(), getPosition(), getRotation());
 		}

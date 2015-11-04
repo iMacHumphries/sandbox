@@ -32,6 +32,8 @@ public class TerrainShader extends ShaderProgram {
 	private int location_bTexture;
 	private int location_blendMap;
 	private int location_plane;
+	private int location_fogDensity;
+	private int location_fogGradient;
 	
 	
 	public TerrainShader() {
@@ -60,6 +62,9 @@ public class TerrainShader extends ShaderProgram {
 		location_bTexture = super.getUniformLocation("bTexture");
 		location_blendMap = super.getUniformLocation("blendMap");
 		location_plane = super.getUniformLocation("plane");
+		location_fogDensity = super.getUniformLocation("fogDensity");
+		location_fogGradient = super.getUniformLocation("fogGradient");
+		
 		
 		location_lightPosition = new int[MAX_LIGHTS];
 		location_lightColor = new int[MAX_LIGHTS];
@@ -72,6 +77,11 @@ public class TerrainShader extends ShaderProgram {
 		}
 		
 		
+	}
+	
+	public void loadFogDensityGradient(float density, float gradient) {
+		super.loadFloat(location_fogDensity, density);
+		super.loadFloat(location_fogGradient, gradient);
 	}
 
 	public void connectTextureUnits() {

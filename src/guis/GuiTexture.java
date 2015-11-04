@@ -9,14 +9,14 @@ public class GuiTexture {
 	private int texture;
 	private Vector2f position;
 	private Vector2f scale;
+	
 	public GuiTexture(int texture, Vector2f position, Vector2f scale) {
-		super();
 		this.texture = texture;
 		this.position = position;
 		this.scale = scale;
 	}
 	
-	public GuiTexture(String fileName,Vector2f position, Vector2f scale) {
+	public GuiTexture(String fileName, Vector2f position, Vector2f scale) {
 		this(Loader.getInstance().loadTexture(fileName), position, scale);
 	}
 	

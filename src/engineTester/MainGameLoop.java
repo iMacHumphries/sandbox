@@ -1,19 +1,25 @@
 package engineTester;
 
-import java.net.InetAddress;
+import entities.Camera;
+import entities.EntityManager;
+import entities.Light;
+import entities.LocalPlayer;
+import entities.MoveController;
+import entities.NetworkPlayer;
+import entities.Ship;
+import fonts.Label;
+import fonts.LabelRenderer;
+import guis.GuiRenderer;
+import guis.GuiTexture;
+import guis.ChatBox;
+import guis.TypeWriter;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-import models.RawModel;
 import models.TexturedModel;
-import objConverter.ModelData;
-import objConverter.OBJFileLoader;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
@@ -21,34 +27,13 @@ import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
-import collision.AABBox;
-import collision.EndPoint;
-import collision.SWPDelegate;
-import collision.SweepAndPrune;
-import entities.Camera;
-import entities.Entity;
-import entities.EntityManager;
-import entities.Light;
-import entities.MoveController;
-import entities.NetworkPlayer;
-import entities.Player;
-import entities.Ship;
-import guis.GuiRenderer;
-import guis.GuiTexture;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
-import renderEngine.EntityRenderer;
-import server.Client;
 import server.MultiplayerManager;
-import server.Packet_01_Login;
-import server.Server;
-import shaders.StaticShader;
 import terrains.Terrain;
-import textures.ModelTexture;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
-import toolbox.Debug;
 import toolbox.MousePicker;
 import water.WaterFrameBuffers;
 import water.WaterRenderer;
@@ -57,26 +42,36 @@ import water.WaterTile;
 
 public class MainGameLoop{
 
-	//private static boolean isHosting = true;
-	private static boolean isHosting = false;
+	private static boolean isHosting = true;
+	//private static boolean isHosting = false;
+	private static final int WATER_HEIGHT = 4;
 	
 	public static void main(String[] args) {
 		
 		DisplayManager.createDisplay();
 		
 		Loader loader = Loader.getInstance();
-		MasterRenderer renderer = new MasterRenderer();
+		MasterRenderer renderer = MasterRenderer.getInstance();
 		GuiRenderer guiRenderer = new GuiRenderer(loader);
+		LabelRenderer labelRenderer = new LabelRenderer(loader);
 		
 		EntityManager entityManager = EntityManager.getInstance();
 		List<GuiTexture> guis = new ArrayList<GuiTexture>();
 		List<Terrain> terrains = new ArrayList<Terrain>();
 		List<Light> lights = new ArrayList<Light>();
+		List<Label> labels = new ArrayList<Label>();
+		
+		//guis.add(new GuiTexture("fontMap", new Vector2f(0,0), new Vector2f(0.25f,0.25f)));
+		
+		Label mainLabel = new Label("", new Vector2f(-1f,-1f), new Vector2f(0.1f,0.1f), new Vector4f(255,255,255,1.0f));
+		labels.add(mainLabel); // always render;
+		ChatBox chatBox = new ChatBox(null, null, labelRenderer, mainLabel);
+		
 		
 		String name = "Marz";
 		if (!isHosting) name = "ben";
 		
-		NetworkPlayer player = new NetworkPlayer( new TexturedModel("person", "playerTexture"),new Vector3f(752,7,-290), 0, 0, 0, 0.3f,null,-1,name);
+		LocalPlayer player = new LocalPlayer( new TexturedModel("person", "playerTexture"),new Vector3f(752,7,-290), 0, 0, 0, 0.3f,null,-1,name);
 		MoveController.getInstance().setCurrentControlledEntity(player);
 		entityManager.addEntity(player);
 		
@@ -122,28 +117,36 @@ public class MainGameLoop{
 		WaterShader waterShader = new WaterShader();
 		WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix(), fbos);
 		List<WaterTile> waters = new ArrayList<WaterTile>();
-		WaterTile water = new WaterTile(75,-75,4);
-		waters.add(water);
+		
+		
+		
+		for (int x= 0; x<40; x++) {
+			for (int z=0; z<20; z++) {
+				WaterTile water = new WaterTile(60 * x,-60 *z,WATER_HEIGHT);
+				waters.add(water);
+			}
+		}
+		
 			
 		Ship ship = new Ship(new TexturedModel("ship", "boatTexture"), new Vector3f(752,7, -150), 0, 180, 0, 1, waters);
 		entityManager.addEntity(ship);
 
-		boolean isDevModeSet = false;
+		boolean isDevModeSet = true;
 
 		while(!Display.isCloseRequested()) {
 			
-			if (Keyboard.isKeyDown(Keyboard.KEY_P)){
-				if(!isDevModeSet) {
-					isDevModeSet = true;
-					GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE );
-				}
-				else{ 
-					GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL );
-					isDevModeSet = false;
-				}
-			}
+//			if (Keyboard.isKeyDown(Keyboard.KEY_P)){
+//				if(!isDevModeSet) {
+//					isDevModeSet = true;
+//					GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE );
+//				}
+//				else{ 
+//					GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL );
+//					isDevModeSet = false;
+//				}
+//			}
 			
-			player.move(terrain);
+			player.move(terrain, waters.get(0));
 			ship.move();
 			camera.move();
 			picker.update();
@@ -151,16 +154,16 @@ public class MainGameLoop{
 			GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 			//render reflection texture
 			fbos.bindReflectionFrameBuffer();
-			float distance = 2 * (camera.getPosition().y - water.getHeight());
+			float distance = 2 * (camera.getPosition().y -WATER_HEIGHT);
 			camera.getPosition().y -=distance;
 			camera.invertPitch();
-			renderer.renderScene(entityManager.getEntities(), terrains, lights, camera, new Vector4f(0,1,0,-water.getHeight()));
+			renderer.renderScene(entityManager.getEntities(), terrains, lights, camera, new Vector4f(0,1,0,-WATER_HEIGHT));
 			camera.getPosition().y += distance;
 			camera.invertPitch();
 			
 			//render refraction texture
 			fbos.bindRefractionFrameBuffer();
-			renderer.renderScene(entityManager.getEntities(), terrains, lights, camera, new Vector4f(0,-1,0,water.getHeight()));
+			renderer.renderScene(entityManager.getEntities(), terrains, lights, camera, new Vector4f(0,-1,0,WATER_HEIGHT));
 			fbos.unbindCurrentFrameBuffer();
 					
 			// render to screen
@@ -168,8 +171,11 @@ public class MainGameLoop{
 			renderer.renderScene(entityManager.getEntities(), terrains, lights, camera, new Vector4f(0,-1,0,1500));
 			waterRenderer.render(waters, camera);
 			guiRenderer.render(guis);
+			labelRenderer.render(labels);
 			
+			multiplayerManager.update();
 			entityManager.update();
+			chatBox.render();
 			
 			DisplayManager.updateDisplay();
 		}
@@ -177,9 +183,11 @@ public class MainGameLoop{
 		fbos.cleanUp();
 		waterShader.cleanUp();
 		guiRenderer.cleanUp();
+		labelRenderer.cleanUp();
 		renderer.cleanUp();
 		loader.cleanUp();
 		DisplayManager.closeDisplay();	
+		System.exit(0);
 	}
 
 	

@@ -22,7 +22,7 @@ public class Entity implements SWPDelegate{
 	private float scale;
 	private int textureIndex = 0;
 	
-	private AABBox boundingBox;
+	protected AABBox boundingBox;
 		
 	// MAIN CONSTRUCTOR
 	public Entity(TexturedModel model, Vector3f position, float rotX,

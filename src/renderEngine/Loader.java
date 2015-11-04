@@ -8,6 +8,7 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import models.LevelOfDetail;
 import models.RawModel;
 import objConverter.ModelData;
 
@@ -57,14 +58,15 @@ public class Loader {
 		// bind indices to a 
 		bindIndicesBuffer(indices);
 		//2. Store positional data the new vao at index 0
-		storeDataInAttributeList(0,3, positions);
+		LevelOfDetail lod = new LevelOfDetail(positions);
+		storeDataInAttributeList(0,3, lod.getFloatArray());
 		storeDataInAttributeList(1,2, textureCoords);
 		storeDataInAttributeList(2,3, normals);
 		
 		//3. unbind vao
 		unbindVAO();
 		
-		return new RawModel(vaoID, indices.length, positions);
+		return new RawModel(vaoID, indices.length, positions, lod);
 	}
 	
 	public RawModel loadToVAO(float[] positions, int dimensions) {
@@ -72,6 +74,15 @@ public class Loader {
 		this.storeDataInAttributeList(0, dimensions, positions);
 		unbindVAO();
 		return new RawModel(vaoID, positions.length/dimensions, positions);
+	}
+	
+	public RawModel loadToVAO(float[] positions, float[] textureCoords, int dimensions){
+		int vaoID = createVAO();
+		this.storeDataInAttributeList(0, dimensions, positions);
+		this.storeDataInAttributeList(1, dimensions, textureCoords);
+		
+		unbindVAO();
+		return new RawModel(vaoID, positions.length/dimensions, null);
 	}
 	
 	public RawModel loadToVAO(ModelData data) {

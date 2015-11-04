@@ -1,0 +1,11 @@
+Performance
+Fix Edge reduction algorithm
+	- fix reduction removal method.
+
+Terrain Edge reduction algorithm
+Test FPS Before and after.
+
+Non-performance
+Precision collision algorithm research
+Ship cannons :D (Parent Child System?)
+Animation Systems With Blender Parser(.obj)?.

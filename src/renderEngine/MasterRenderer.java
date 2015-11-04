@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
 import entities.Camera;
@@ -25,7 +26,13 @@ public class MasterRenderer {
 	private static final float GREEN =  0.4f;
 	private static final float BLUE =  0.5f;
 	
-			
+	public static final Vector3f DEFAULT_FOG_COLOR =  new Vector3f(RED,GREEN,BLUE);
+	public static final float DEFAULT_FOG_DENSITY = 0.0035f;
+	public static final float DEFAULT_FOG_GRADIENT = 5.0f;
+
+	private Vector3f fogColor = DEFAULT_FOG_COLOR;
+	private float fogDensity = DEFAULT_FOG_DENSITY;
+	private float fogGradient = DEFAULT_FOG_GRADIENT;
 	private StaticShader shader = new StaticShader();
 	private EntityRenderer renderer;
 	private TerrainRenderer terrainRenderer;
@@ -37,6 +44,14 @@ public class MasterRenderer {
 	private List<Terrain> terrains = new ArrayList<Terrain>();
 	
 	private SkyboxRenderer skyboxRenderer;
+	
+	private static MasterRenderer sharedMaster = null;
+	public static MasterRenderer getInstance() {
+		if (sharedMaster == null) {
+			sharedMaster = new MasterRenderer();
+		}
+		return sharedMaster;
+	}
 	
 	public MasterRenderer() {
 		enableCulling();
@@ -71,7 +86,8 @@ public class MasterRenderer {
 		
 		shader.start();
 		shader.loadClipPlane(clipPlane);
-		shader.loadSkyColor(RED, GREEN, BLUE);
+		shader.loadSkyColor(fogColor.x, fogColor.y, fogColor.z);
+		shader.loadFogDensityGradient(fogDensity, fogGradient);
 		shader.loadLights(lights);
 		shader.loadViewMatrix(camera);
 		renderer.render(entities);
@@ -79,13 +95,14 @@ public class MasterRenderer {
 		
 		terrainShader.start();
 		terrainShader.loadClipPlane(clipPlane);
-		terrainShader.loadSkyColorVariable(RED, GREEN, BLUE);
+		terrainShader.loadSkyColorVariable(fogColor.x, fogColor.y, fogColor.z);
+		terrainShader.loadFogDensityGradient(fogDensity, fogGradient);
 		terrainShader.loadLights(lights);
 		terrainShader.loadViewMatrix(camera);
 		terrainRenderer.render(terrains);
 		terrainShader.stop();
 		
-		skyboxRenderer.render(camera, RED, GREEN, BLUE);
+		skyboxRenderer.render(camera, fogColor.x, fogColor.y, fogColor.z);
 		
 		terrains.clear();
 		entities.clear();
@@ -125,4 +142,17 @@ public class MasterRenderer {
 	public Matrix4f getProjectionMatrix() {
 		return projectionMatrix;
 	}
+	
+	public void setFogColor(Vector3f fog){
+		this.fogColor = fog;
+	}
+	
+	public void setFogDensity(float density) {
+		this.fogDensity = density;
+	}
+	
+	public void setFogGradient(float gradient) {
+		this.fogGradient = gradient;
+	}
+
 }

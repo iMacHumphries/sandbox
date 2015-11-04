@@ -87,7 +87,7 @@ public class SkyboxRenderer {
 	public void render(Camera camera, float r, float g, float b) {
 		shader.start();
 		shader.loadViewMatrix(camera);
-		shader.loadFogColor(this.r, this.g, this.b);
+		shader.loadFogColor(r , g , b);
 		GL30.glBindVertexArray(cube.getVaoID());
 		GL20.glEnableVertexAttribArray(0);
 		bindTextures();
